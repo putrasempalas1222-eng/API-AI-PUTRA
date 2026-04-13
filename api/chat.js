@@ -10,6 +10,9 @@ export default async function handler(req, res) {
   }
 
   try {
+    // 🔥 FIX BODY (ini penting)
+    const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+
     const response = await fetch(
       "https://us-central1-conquer-apps-2ad61.cloudfunctions.net/prod/api.live",
       {
@@ -17,7 +20,7 @@ export default async function handler(req, res) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(req.body),
+        body: JSON.stringify(body),
       }
     );
 
@@ -25,6 +28,9 @@ export default async function handler(req, res) {
 
     return res.status(200).json(data);
   } catch (err) {
-    return res.status(500).json({ error: "Server error" });
+    return res.status(500).json({
+      error: "Server error",
+      detail: err.message
+    });
   }
 }
