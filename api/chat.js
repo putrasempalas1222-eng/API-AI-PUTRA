@@ -36,26 +36,21 @@ export default async function handler(req, res) {
         headers: {
           "Content-Type": "application/json"
         },
-
-        // ⚠️ sesuaikan kalau API kamu beda format
         body: JSON.stringify({
           prompt: message
         })
       }
     );
 
-    // ambil response aman
     let data;
     try {
       data = await response.json();
     } catch {
-      data = { raw: "Tidak bisa parse JSON dari API" };
+      data = { error: "Response bukan JSON" };
     }
 
-    // ✅ kirim balik ke n8n
     return res.status(200).json({
       success: true,
-      input: message,
       result: data
     });
 
