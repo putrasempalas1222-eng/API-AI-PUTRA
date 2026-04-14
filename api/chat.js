@@ -1,20 +1,7 @@
 export default async function handler(req, res) {
-  const API_KEY = "PUTRA_SECRET_123";
-
-  // ambil semua kemungkinan header
-  const clientKey =
-    req.headers["x-api-key"] ||
-    req.headers["authorization"] ||
-    req.headers["apikey"];
-
-  console.log("HEADERS:", req.headers);
-  console.log("KEY TERBACA:", clientKey);
-
-  if (!clientKey || clientKey.trim() !== API_KEY) {
-    return res.status(403).json({
-      error: "API key tidak valid",
-      received: clientKey
-    });
+  // hanya POST
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
@@ -30,9 +17,12 @@ export default async function handler(req, res) {
     );
 
     const data = await response.json();
-    res.status(200).json(data);
 
+    return res.status(200).json(data);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({
+      error: "Proxy error",
+      detail: err.message,
+    });
   }
 }
