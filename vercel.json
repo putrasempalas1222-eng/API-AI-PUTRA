@@ -1,8 +1,9 @@
 {
-  "routes": [
+  "version": 2,
+  "rewrites": [
     {
-      "src": "/api/chat",
-      "dest": "/api/chat.js"
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
     }
   ]
 }
